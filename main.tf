@@ -5,6 +5,7 @@ resource "vault_namespace" "djoo-demo" {
 
 ### Create a KVv2 Secrets Engine
 resource "vault_mount" "kv-demo" {
+  namespace  = vault_namespace.djoo-demo.path
   path        = "kv-demo"
   type        = "kv"
   options     = { version = "2" }
@@ -12,6 +13,7 @@ resource "vault_mount" "kv-demo" {
 }
 
 resource "vault_kv_secret_backend_v2" "kv-demo-back" {
+  namespace  = vault_namespace.djoo-demo.path
   mount                = vault_mount.kv-demo.path
   max_versions         = 100
   #delete_version_after = 12600
@@ -20,6 +22,7 @@ resource "vault_kv_secret_backend_v2" "kv-demo-back" {
 
 ### Entries for the KVv2 Secrets Engine
 resource "vault_kv_secret_v2" "prod" {
+  namespace  = vault_namespace.djoo-demo.path
   mount = vault_mount.kv-demo.path
   name = "prod"
   cas = 1
@@ -32,6 +35,7 @@ resource "vault_kv_secret_v2" "prod" {
 }
 
 resource "vault_kv_secret_v2" "dev" {
+  namespace  = vault_namespace.djoo-demo.path
   mount = vault_mount.kv-demo.path
   name = "dev"
   cas = 1
