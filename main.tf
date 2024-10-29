@@ -4,7 +4,7 @@ resource "vault_namespace" "djoo-demo" {
 }
 
 ### Create a KVv2 Secrets Engine
-resource "vault_secret_backend" "kv-demo" {
+resource "vault_secret_backend_v2" "kv-demo" {
   path = "djoo-demo/kv-demo"
   type = "kv-v2"
   description = "Demo KVv2 Secrets Engine"
