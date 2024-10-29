@@ -47,4 +47,17 @@ resource "vault_kv_secret_v2" "dev" {
     )
 }
 
-
+resource "vault_kv_secret_v2" "private-information" {
+#  namespace  = vault_namespace.djoo-demo.path
+  mount = vault_mount.kv-demo.path
+  name = "private-information"
+  cas = 1
+  data_json = jsonencode (
+        {
+            name = "David Joo",
+            role = "Sr. Solutions Engineer",
+            company = "HashiCorp"
+            Email = "david.joo at hashicorp.com"
+        }
+    )
+}
