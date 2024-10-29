@@ -4,15 +4,23 @@ resource "vault_namespace" "djoo-demo" {
 }
 
 ### Create a KVv2 Secrets Engine
-resource "vault_secret_backend_v2" "kv-demo" {
-  path = "djoo-demo/kv-demo"
-  type = "kv-v2"
-  description = "Demo KVv2 Secrets Engine"
+resource "vault_mount" "kv-demo" {
+  path        = "kv-demo"
+  type        = "kv"
+  options     = { version = "2" }
+  description = "KV Version 2 secret engine mount"
+}
+
+resource "vault_kv_secret_backend_v2" "kv-demo-back" {
+  mount                = vault_mount.kv-demo.path
+  max_versions         = 100
+  #delete_version_after = 12600
+  cas_required         = true
 }
 
 ### Entries for the KVv2 Secrets Engine
 resource "vault_kv_secret_v2" "prod" {
-  mount = vault_secret_backend.kv-demo.path
+  mount = vault_mount.kv-demo.path
   name = "prod"
   cas = 1
   data_json = jsonencode (
@@ -24,7 +32,7 @@ resource "vault_kv_secret_v2" "prod" {
 }
 
 resource "vault_kv_secret_v2" "dev" {
-  mount = vault_secret_backend.kv-demo.path
+  mount = vault_mount.kv-demo.path
   name = "dev"
   cas = 1
   data_json = jsonencode (
