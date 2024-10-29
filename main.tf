@@ -7,7 +7,7 @@
 resource "vault_mount" "kv-demo" {
 #  namespace  = vault_namespace.djoo-demo.path
   path        = "kv-demo"
-  type        = "kv"
+  type        = "kv-v2"
   options     = { version = "2" }
   description = "KV Version 2 secret engine mount"
 }
